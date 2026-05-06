@@ -1,27 +1,30 @@
 import fetch from 'node-fetch';
 
-const simulateSale = async () => {
-  // ATUALIZADO PARA PORTA 3005
+const simulateRealYampi = async () => {
   const url = 'http://127.0.0.1:3005/webhook/yampi';
-
+  
+  // PAYLOAD EXATO DA DOCUMENTAÇÃO DA YAMPI
   const dummyPayload = {
     event: 'order.paid',
-    data: {
-      total: 27.90,
+    resource: {
       customer: {
-        first_name: 'Marcos',
-        email: 'debian.psycho@gmail.com'
-      },
-      items: [{ name: 'Plano Completo' }]
+        data: {
+          first_name: 'Marcos (Teste Real)',
+          email: 'aristocrata.black@gmail.com'
+        }
+      }
     }
   };
 
-  console.log('🚀 Enviando simulação para PORTA 3005...');
+  console.log('🚀 Enviando simulação no padrão REAL da Yampi...');
 
   try {
     const response = await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'x-yampi-token': 'wh_OSKPtHPL8P1iNAgousl1H1mvxhiTeV7qHlpY'
+      },
       body: JSON.stringify(dummyPayload)
     });
 
@@ -32,4 +35,4 @@ const simulateSale = async () => {
   }
 };
 
-simulateSale();
+simulateRealYampi();

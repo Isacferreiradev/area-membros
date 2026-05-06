@@ -1,35 +1,50 @@
-import { Resend } from 'resend';
+import fetch from 'node-fetch';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const testProduction = async () => {
+  const url = 'https://area-membros-nu.vercel.app/api/yampi';
+  const secret = 'wh_OSKPtHPL8P1iNAgousl1H1mvxhiTeV7qHlpY';
+  const testEmail = 'aristocrata.black@gmail.com';
 
-async function testEmail() {
-  const targetEmail = 'kennerwarl@gmail.com';
-  console.log(`⏳ Tentando enviar e-mail de teste para ${targetEmail}...`);
-  
+  console.log('🏁 INICIANDO TESTE FINAL DE PRODUÇÃO...');
+  console.log(`🔗 Alvo: ${url}`);
+  console.log(`📧 Destinatário: ${testEmail}\n`);
+
   try {
-    const { data, error } = await resend.emails.send({
-      from: 'Combine TEA <entrega@combinetea.online>', // DOMÍNIO VERIFICADO
-      to: targetEmail, 
-      subject: 'Teste de Entrega Oficial 🚀',
-      html: `
-        <div style="font-family: sans-serif; padding: 20px;">
-          <h1>Teste bem-sucedido!</h1>
-          <p>Se você recebeu este e-mail, significa que o domínio <b>combinetea.online</b> está funcionando perfeitamente para entregas externas.</p>
-        </div>
-      `
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'x-yampi-token': secret
+      },
+      body: JSON.stringify({
+        event: 'order.paid',
+        data: {
+          customer: {
+            first_name: 'Marcos (Teste Final)',
+            email: testEmail
+          }
+        }
+      })
     });
 
-    if (error) {
-      console.error('❌ Erro retornado pelo Resend:', error);
-    } else {
-      console.log('✅ E-mail enviado com sucesso!');
-      console.log('ID da operação no Resend:', data.id);
-    }
-  } catch (err) {
-    console.error('💥 Erro inesperado:', err);
-  }
-}
+    const result = await response.json();
 
-testEmail();
+    if (response.ok && result.success) {
+      console.log('✅ SUCESSO TOTAL!');
+      console.log('📝 O servidor da Vercel processou e a Resend aceitou o envio.');
+      console.log(`🆔 ID do E-mail: ${result.id}`);
+      console.log('\n🚀 Verifique sua caixa de entrada (ou spam) em instantes!');
+    } else {
+      console.log('❌ FALHA NA PRODUÇÃO:');
+      console.log(JSON.stringify(result, null, 2));
+      console.log('\n💡 DICA: Verifique se você deu GIT PUSH e se as variáveis de ambiente na Vercel estão corretas.');
+    }
+
+  } catch (error) {
+    console.log('❌ ERRO DE CONEXÃO:', error.message);
+  }
+};
+
+testProduction();

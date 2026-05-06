@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compra Confirmada! - TEA Members</title>
+    <style>
+        :root {
+            --primary: #2D8B3E;
+            --bg: #F8FAFC;
+            --text: #1E293B;
+            --text-muted: #64748B;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+        body {
+            background-color: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 60px 40px;
+            border-radius: 40px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.08);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .success-animation {
+            width: 100px;
+            height: 100px;
+            background: #F0FDF4;
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            margin: 0 auto 30px;
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        @keyframes scaleIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        h1 { font-size: 2.2rem; font-weight: 900; color: var(--text); margin-bottom: 15px; letter-spacing: -1px; }
+        p.main-text { color: var(--text-muted); font-size: 1.1rem; line-height: 1.6; margin-bottom: 40px; }
+
+        .email-notice {
+            background: #F8FAFC;
+            border: 2px solid #F1F5F9;
+            padding: 30px;
+            border-radius: 25px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .email-notice h3 { color: var(--primary); font-size: 1.2rem; font-weight: 800; margin-bottom: 10px; }
+        .email-notice p { color: var(--text); font-size: 0.95rem; font-weight: 600; line-height: 1.5; }
+
+        .btn-whatsapp {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            background: #25D366;
+            color: white;
+            padding: 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .btn-whatsapp:hover { transform: scale(1.02); filter: brightness(1.1); }
+        
+        .footer-text { margin-top: 30px; color: var(--text-muted); font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-animation">✓</div>
+        <h1>Tudo certo!</h1>
+        <p class="main-text">Sua compra foi aprovada e seu acesso está sendo preparado.</p>
+        
+        <div class="email-notice">
+            <h3>📧 Verifique seu e-mail</h3>
+            <p>Enviamos o seu link de acesso exclusivo para o seu e-mail de compra agora mesmo.</p>
+            <p style="margin-top: 10px; font-size: 0.8rem; color: var(--text-muted); font-weight: 400;">
+                (Não esqueça de checar a pasta de Spam ou Promoções)
+            </p>
+        </div>
+
+        <a href="https://wa.me/5521969836161" class="btn-whatsapp">
+            PRECISA DE AJUDA? WHATSAPP
+        </a>
+
+        <p class="footer-text">Equipe TEA Members - Acesso Vitalício Confirmado</p>
+    </div>
+</body>
+</html>

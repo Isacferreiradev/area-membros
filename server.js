@@ -20,26 +20,28 @@ app.post('/webhook/yampi', async (req, res) => {
     return res.status(401).json({ error: 'Não autorizado' });
   }
 
-  // Padrão Real Yampi
-  const customer = body.resource?.customer?.data || body.data?.customer;
-  const email = customer?.email;
+  const customer = body.data?.customer;
+  const email = customer?.email || body.email;
 
-  if (body.event === 'order.paid' && email) {
+  if (body.event === 'order.paid' || body.event === 'sale.approved' || !body.event) {
     try {
-      await resend.emails.send({
+      const { data, error } = await resend.emails.send({
         from: 'Raiz Bíblica <entrega@raizbiblica.online>',
         to: [email],
         subject: 'Seu acesso ao Raiz Bíblica chegou! 🙌',
-        html: `<h1>Raiz Bíblica</h1><p>Olá, ${customer?.first_name}! Acesso liberado no portal.</p>`
+        html: `<h1>Raiz Bíblica</h1><p>Olá, ${customer?.first_name || 'Aluno'}! Seu acesso está liberado.</p>`
       });
-      
-      console.log(`✅ E-mail enviado (Padrão Yampi) para: ${email}`);
-      return res.status(200).json({ success: true });
+
+      if (error) return res.status(400).json({ error });
+
+      console.log(`✅ E-mail enviado localmente para: ${email}`);
+      return res.status(200).json({ success: true, id: data.id });
     } catch (err) {
       return res.status(500).json({ error: err.message });
     }
   }
-  res.status(200).json({ success: true, message: 'Recebido' });
+  res.status(200).json({ success: true });
 });
 
-app.listen(3005, () => console.log('🚀 Servidor Local (Padrão Oficial Yampi) na 3005'));
+const PORT = 3005;
+app.listen(PORT, () => console.log(`🚀 Servidor Local rodando na porta ${PORT}`));

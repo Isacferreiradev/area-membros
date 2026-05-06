@@ -1,7 +1,9 @@
-const express = require('express');
-const { Resend } = require('resend');
-const cors = require('cors');
-require('dotenv').config();
+import express from 'express';
+import { Resend } from 'resend';
+import cors from 'cors';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
 app.use(express.json());
@@ -27,30 +29,43 @@ app.post('/webhook/yampi', async (req, res) => {
     const customer = body.data.customer;
 
     try {
+      // ATUALIZADO PARA O DOMÍNIO OFICIAL: raizbiblica.online
       await resend.emails.send({
-        from: 'Raiz Bíblica <entrega@combinetea.online>',
+        from: 'Raiz Bíblica <entrega@raizbiblica.online>', 
         to: [customer.email],
         subject: 'Seu acesso ao Raiz Bíblica chegou! 🙌',
         html: `
-          <div style="background-color: #050505; color: #ffffff; font-family: sans-serif; padding: 40px; max-width: 600px; margin: 0 auto; border: 1px solid #D4AF37;">
-            <h1 style="color: #D4AF37; text-align: center;">Raiz Bíblica</h1>
-            <p>Olá, ${customer.first_name}!</p>
-            <p>Acesse seus materiais nos links abaixo:</p>
-            <p><a href="${LINKS_DRIVE.maps}" style="color: #D4AF37;">📂 MAPAS BÍBLICOS</a></p>
-            <p><a href="${LINKS_DRIVE.planner}" style="color: #D4AF37;">📅 PLANNER 30 DIAS</a></p>
-            <p><a href="${LINKS_DRIVE.audio}" style="color: #D4AF37;">🎧 AUDIOGUIA VIP</a></p>
+          <div style="background-color: #050505; color: #ffffff; font-family: sans-serif; padding: 40px; max-width: 600px; margin: 0 auto; border: 1px solid #D4AF37; border-radius: 20px;">
+            <div style="text-align: center; margin-bottom: 30px;">
+              <h1 style="color: #D4AF37; font-family: serif; font-size: 32px; margin-bottom: 10px;">Raiz Bíblica</h1>
+              <p style="color: #888; font-size: 14px; letter-spacing: 2px;">ENTREGA DE ACESSO VIP</p>
+            </div>
+            
+            <p style="font-size: 18px;">Olá, <strong>${customer.first_name}</strong>!</p>
+            <p style="line-height: 1.6; color: #ccc;">Seus materiais já estão liberados. Clique no botão abaixo para acessar sua pasta exclusiva no Google Drive.</p>
+            
+            <div style="background: rgba(212, 175, 55, 0.05); padding: 30px; border-radius: 15px; border: 1px solid rgba(212, 175, 55, 0.2); margin: 30px 0; text-align: center;">
+              <a href="${LINKS_DRIVE.maps}" style="background-color: #D4AF37; color: #000; padding: 18px 35px; text-decoration: none; border-radius: 10px; font-weight: bold; display: inline-block; font-size: 16px;">ACESSAR MEUS MATERIAIS</a>
+            </div>
+
+            <div style="text-align: center; margin-top: 40px;">
+              <p style="font-size: 14px; color: #666;">Dúvidas? Acesse nosso portal:<br>
+              <a href="https://area-membros-nu.vercel.app" style="color: #D4AF37;">area-membros-nu.vercel.app</a></p>
+            </div>
           </div>
         `,
       });
 
-      return res.status(200).json({ message: 'E-mail enviado' });
+      console.log(`✅ Sucesso! E-mail enviado de entrega@raizbiblica.online para: ${customer.email}`);
+      return res.status(200).json({ success: true });
     } catch (err) {
-      return res.status(500).json({ error: err.message });
+      console.error('❌ Erro no envio:', err.message);
+      return res.status(500).json({ success: false, error: err.message });
     }
   }
 
-  res.status(200).json({ message: 'Recebido' });
+  res.status(200).json({ success: true });
 });
 
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => console.log(`🚀 Rodando na porta ${PORT}`));
+const PORT = 3005;
+app.listen(PORT, () => console.log(`🚀 Servidor de Entrega rodando na porta ${PORT}`));

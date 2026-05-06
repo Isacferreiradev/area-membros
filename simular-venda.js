@@ -1,24 +1,22 @@
-const fetch = require('node-fetch');
+import fetch from 'node-fetch';
 
-// SIMULADOR DE VENDA APROVADA NA YAMPI
 const simulateSale = async () => {
-  const url = 'http://localhost:3001/webhook/yampi';
-  
+  // ATUALIZADO PARA PORTA 3005
+  const url = 'http://127.0.0.1:3005/webhook/yampi';
+
   const dummyPayload = {
     event: 'order.paid',
     data: {
-      total: 27.90, // Simulando Plano Completo
+      total: 27.90,
       customer: {
         first_name: 'Marcos',
-        email: 'seu_email_de_teste@gmail.com' // TROQUE PELO SEU E-MAIL PARA TESTAR
+        email: 'debian.psycho@gmail.com'
       },
-      items: [
-        { name: 'Raiz Bíblica - Plano Completo', quantity: 1 }
-      ]
+      items: [{ name: 'Plano Completo' }]
     }
   };
 
-  console.log('🚀 Enviando simulação de venda para o servidor...');
+  console.log('🚀 Enviando simulação para PORTA 3005...');
 
   try {
     const response = await fetch(url, {
@@ -30,8 +28,7 @@ const simulateSale = async () => {
     const result = await response.json();
     console.log('✅ Resposta do Servidor:', result);
   } catch (error) {
-    console.error('❌ Erro na simulação:', error.message);
-    console.log('\n💡 Dica: Certifique-se de que o servidor (node server.js) está rodando!');
+    console.error('❌ Erro:', error.message);
   }
 };
 

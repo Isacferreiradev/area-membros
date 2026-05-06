@@ -20,22 +20,22 @@ app.post('/webhook/yampi', async (req, res) => {
     return res.status(401).json({ error: 'Não autorizado' });
   }
 
-  const customer = body.data?.customer;
+  // Extração Blindada
+  const resource = body.resource;
+  const customer = resource?.customer?.data || body.data?.customer;
   const email = customer?.email || body.email;
 
-  if (body.event === 'order.paid' || body.event === 'sale.approved' || !body.event) {
+  if ((body.event === 'order.paid' || !body.event) && email) {
     try {
-      const { data, error } = await resend.emails.send({
+      await resend.emails.send({
         from: 'Raiz Bíblica <entrega@raizbiblica.online>',
         to: [email],
         subject: 'Seu acesso ao Raiz Bíblica chegou! 🙌',
-        html: `<h1>Raiz Bíblica</h1><p>Olá, ${customer?.first_name || 'Aluno'}! Seu acesso está liberado.</p>`
+        html: `<h1>Raiz Bíblica</h1><p>Olá, ${customer?.first_name || 'Aluno'}! Acesso liberado no portal.</p>`
       });
-
-      if (error) return res.status(400).json({ error });
-
-      console.log(`✅ E-mail enviado localmente para: ${email}`);
-      return res.status(200).json({ success: true, id: data.id });
+      
+      console.log(`✅ E-mail enviado para: ${email}`);
+      return res.status(200).json({ success: true });
     } catch (err) {
       return res.status(500).json({ error: err.message });
     }
@@ -44,4 +44,4 @@ app.post('/webhook/yampi', async (req, res) => {
 });
 
 const PORT = 3005;
-app.listen(PORT, () => console.log(`🚀 Servidor Local rodando na porta ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Servidor Local REATIVADO na 3005`));
